@@ -4,3 +4,4 @@
   * [未分类](post/default/)
   * [bitcoin](post/bitcoin/)
   * [cli](post/cli/)
+  * [数据库](post/数据库/)

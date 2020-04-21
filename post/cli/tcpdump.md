@@ -35,12 +35,21 @@ Usage: tcpdump [-aAbdDefhHIJKlLnNOpqStuUvxX#] [ -B size ] [ -c count ]
 ```
 ## 例子
 抓取20个来自百度的tcp包
+
 `tcpdump -c 20 -n -i enp0s3 tcp and src host www.baidu.com`
+
 所有tcp协议且非20端口
+
 `tcpdump -i enp0s3 tcp and not port 22`
+
 可以用括号组合复杂的表达式
+
 `tcpdump -i enp0s3 'src www.baidu.com and (dst port 80 or 441)'`
+
 抓取带有SYN标准的数据， tcp[13]表示tcp数据包头中取第14个字节数据 支持比较 < <= > >= != =
+
 `tcpdump -i enp0s3 'host www.baidu.com and tcp[13]&2!=0'`
+
 写入文件
+
 `tcpdump -c 20 -n -i enp0s3 -w file.cap tcp and src host www.baidu.com`

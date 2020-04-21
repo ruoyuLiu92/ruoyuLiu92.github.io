@@ -30,12 +30,21 @@ $ curl -h
 curl 也支持 ftp
 
 下载文件：
+
 `curl -LO https://github.com/x/releases/download/v3.0.1/xxx.AppImage`
+
 `curl -LO http://www.example.com/pic[1-5].JPG` 循环下载
+
 使用代理：
+
 `curl -x socks5://127.0.0.1:1080 -LO   https://github.com/x/releases/download/v3.0.1/xxx.AppImage`
+
 post请求：
+
 `curl -d'login=kirito&password=123' https://google.com/login`
+
 `curl -d'login=kirito' -d'password=123' https://google.com/login`
+
 上传文件：
+
 `curl -F 'file=@a.txt' https://example.com`

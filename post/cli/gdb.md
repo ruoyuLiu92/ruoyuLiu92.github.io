@@ -1,9 +1,14 @@
 ## gdb
 usage:
+
 直接调试程序 调试coredump 附加到已有进程
+
 `gdb [options] [executable-file [core-file or porcess-id]]`
+
 调试程序 并传递命令行参数给程序
+
 `gdb [options] --args executable-file [arg...]`
+
 也可以通过这些参数启动
 ```text
   --args             Arguments after executable-file are passed to inferior
