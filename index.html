@@ -5,20 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/fonts.css">
-  <link rel="stylesheet" href="css/vue.css">
-  <link rel="stylesheet" href="css/gitalk.css">
+  <link rel="stylesheet" href="//unpkg.zhimg.com/docsify/themes/vue.css">
+  <link rel="stylesheet" href="//unpkg.zhimg.com/gitalk/dist/gitalk.css">
   <link rel="icon" href="//avatars2.githubusercontent.com/u/35095041" type="image/x-icon" />
 </head>
 <body>
   <div id="app">link start</div>
   <script src="js/mydocsify.js">配置</script>
-  <script src="js/docsify.min.js"></script>
-  <!-- <script src="js/search.js">搜索插件</script> -->
-  <script src="js/docsify-copy-code.min.js">代码片复制插件</script>
+  <script src="//unpkg.zhimg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.zhimg.com/docsify-copy-code">代码片复制插件</script>
 
   <!--插入“gitalk评论”模块-->
-  <script src="js/lib/plugins/gitalk.min.js"></script>
-  <script src="jsgitalk/dist/gitalk.min.js"></script>
+  <script src="//unpkg.zhimg.com/docsify/lib/plugins/gitalk.min.js"></script>
+  <script src="//unpkg.zhimg.com/gitalk/dist/gitalk.min.js"></script>
   <script>
     const gitalk = new Gitalk({
       clientID: 'ced6988e6ccedf962b67',
@@ -26,35 +25,9 @@
       repo: 'zshorz.github.io',
       owner: 'zshorz',
       admin: ['zshorz'],
-      id: location.pathname,
-      // facebook-like distraction free mode
       distractionFreeMode: true
     })
   </script>
-  
 
-  <!-- <script src="js/docsify/lib/plugins/gitalk.min.js"></script>
-  <script src="js/gitalk/dist/gitalk.min.js"></script>
-  <script src="js/md5.js"></script>
-  <script>
-    md5name = hex_md5(location.pathname);
-    const gitalk = new Gitalk({
-      clientID: 'ced6988e6ccedf962b67',
-      clientSecret: '73a32399b7eda1c3142aa163775550aa214b056a',
-      repo: 'zshorz.github.io',
-      owner: 'zshorz',
-      admin: ['zshorz'],
-      //id: md5name,
-      // facebook-like distraction free mode
-      distractionFreeMode: true
-    })
-  </script> -->
-
-  <!-- <script>
-    window.$docsify = {
-      disqus: 'shortname'
-    }
-  </script>
-  <script src="js/docsify/lib/plugins/disqus.min.js"></script> -->
 </body>
 </html>
