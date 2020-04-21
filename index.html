@@ -18,6 +18,7 @@
   <!-- <script src="//unpkg.zhimg.com/docsify/lib/plugins/gitalk.min.js"></script> -->
   <script src="js/plugins-gitalk.js">使用自己定制的插件加载</script>
   <script src="//unpkg.zhimg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="js/md5.js"></script>
   <script>
     const gitalk = new Gitalk({
       clientID: 'ced6988e6ccedf962b67',
@@ -25,6 +26,7 @@
       repo: 'zshorz.github.io',
       owner: 'zshorz',
       admin: ['zshorz'],
+      id : hex_md5(hex_md5(window.location.pathname+window.location.hash)),
       distractionFreeMode: true
     })
   </script>
