@@ -12,6 +12,7 @@
       });
   
       hook.doneEach(function (_) {
+        console.log("gitalk.render");
         var el = document.getElementById('gitalk-container');
         if (el == null)return // 这一行自己加的
         while (el.hasChildNodes()) {
