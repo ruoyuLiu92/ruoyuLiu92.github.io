@@ -1,5 +1,6 @@
 ## grep
 `usage: grep [options]... pattern [file]...` 
+
 如果file缺省，会从 stdin 读取
 ```shell
 $ grep --help

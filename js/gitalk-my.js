@@ -8,7 +8,7 @@ function lablegen(hook) {
             repo: 'zshorz.github.io',
             owner: 'zshorz',
             admin: ['zshorz'],
-            id: hex_md5(window.location.pathname + window.location.hash),
+            id: hex_md5(window.location.pathname + window.location.hash.split('?')[0]),
             distractionFreeMode: true
         });
         // console.log(gitalk.id) 
