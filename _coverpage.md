@@ -1,11 +1,5 @@
-![logo]()
-# 个人博客
-## 个人博客
-> 个人博客
-
-* 个人博客
-* 个人博客
-* 个人博客
+![logo](img/avatar.svg ':size=100%')
+# kirito's blog
 
 <!-- [GitHub](https://github.com/docsifyjs/docsify/) -->
 <!-- [Get Started](README) -->

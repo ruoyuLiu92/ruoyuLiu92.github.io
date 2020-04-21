@@ -8,10 +8,12 @@ function lablegen(hook) {
             repo: 'zshorz.github.io',
             owner: 'zshorz',
             admin: ['zshorz'],
-            id: hex_md5(hex_md5(window.location.pathname + window.location.hash)),
+            id: hex_md5(window.location.pathname + window.location.hash),
             distractionFreeMode: true
         });
-        console.log(gitalk.id)
+        // console.log(gitalk.id) 
+        // console.log(gitalk)
+        console.log("new gitalk")
     });
 }
 //

@@ -7,7 +7,7 @@ window.$docsify = {
   onlyCover: true, // 只显示封面，不显示文章
   auto2top: true, //  切换页面自动顶部
 
-  //autoHeader: true,
+  autoHeader: true,
 
   //logo: 'http://avatars2.githubusercontent.com/u/35095041',
   name: 'kirito',
