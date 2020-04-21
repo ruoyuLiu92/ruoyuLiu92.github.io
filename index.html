@@ -15,7 +15,8 @@
   <script src="//unpkg.zhimg.com/docsify-copy-code">代码片复制插件</script>
 
   <!--插入“gitalk评论”模块-->
-  <script src="//unpkg.zhimg.com/docsify/lib/plugins/gitalk.min.js"></script>
+  <!-- <script src="//unpkg.zhimg.com/docsify/lib/plugins/gitalk.min.js"></script> -->
+  <script src="js/plugins-gitalk.js">使用自己定制的插件加载</script>
   <script src="//unpkg.zhimg.com/gitalk/dist/gitalk.min.js"></script>
   <script>
     const gitalk = new Gitalk({
@@ -28,6 +29,7 @@
     })
   </script>
 
+  <!-- 放在最后，确保前面的插件先注册 -->
   <script src="//unpkg.zhimg.com/docsify/lib/docsify.min.js"></script>
 </body>
 </html>
