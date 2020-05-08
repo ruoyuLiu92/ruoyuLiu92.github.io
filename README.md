@@ -3,6 +3,6 @@
 欢迎
 int a;
 void main(){
-    retrun 0;
+    return 0;
 }
 ```
