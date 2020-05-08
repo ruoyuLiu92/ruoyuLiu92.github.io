@@ -1,7 +1,8 @@
 window.$docsify = {
   //...
+  el: '#app', // 指定docsify负责的div id
   loadSidebar: true, // true 定制侧边栏，关闭默认的. false 使用默认
-  subMaxLevel: 3, // 目录级别
+  subMaxLevel: 4, // 目录级别
   loadNavbar: true, // 导航栏
   coverpage: true, // 封面
   onlyCover: true, // 只显示封面，不显示文章
