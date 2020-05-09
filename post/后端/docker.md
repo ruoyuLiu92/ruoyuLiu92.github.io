@@ -204,7 +204,7 @@ Commands:
   images      List images
   import      Import the contents from a tarball to create a filesystem image
   info        Display system-wide information
-  inspect     Return low-level information on Docker objects
+  inspect     Return low-level information on Docker objects 返回有关Docker对象的底层信息 
   kill        Kill one or more running containers
   load        Load an image from a tar archive or STDIN
   login       Log in to a Docker registry
@@ -320,10 +320,12 @@ Options:
 	--rm	运行完就删除容器实例	
 	--name string	指定容器名称
 	--entrypoint string	指定或覆盖ENTRYPOINT
-	-d 		后台运行容器，并打印容器id
+	-d 		后台运行容器，并打印容器idv
 	-v list	绑定volume 绑定一个卷
+	--mount mount	挂载文件系统到容器 和-v功能差不多，推荐使用--mount代替-v
 	-p <宿主端口>:<容器端口>	映射端口
 	-P	将所有EXPOSE声明的端口映射到随机端口
+	--network network 加入docker网络
 ```
 
 ```bash
@@ -644,3 +646,268 @@ $ docker build https://github.com/zshorz/shadowsocks.git#master:v1.2.3
 
 ### 操作容器
 
+```text
+$ docker help container
+
+Usage:	docker container COMMAND
+
+Manage containers
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  inspect     Display detailed information on one or more containers
+  kill        Kill one or more running containers
+  logs        Fetch the logs of a container 后台运行时，用来查看容器输出
+  ls          List containers
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  prune       Remove all stopped containers
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  run         Run a command in a new container
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker container COMMAND --help' for more information on a command.
+```
+
+
+
+#### 启动
+
+* 新建并启动 - `docker run`
+* 启动已终止容器 - `docker container start`
+
+当利用  docker run  来创建容器时，Docker 在后台运行的标准操作包括：
+
+* 检查本地是否存在指定的镜像，不存在就从公有仓库下载
+* 利用镜像创建并启动一个容器
+* 分配一个文件系统，并在只读的镜像层外面挂载一层可读写层
+* 从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去
+* 从地址池配置一个 ip 地址给容器
+* 执行用户指定的应用程序
+* 执行完毕后容器被终止
+
+
+
+
+
+```text
+$ docker container start --help
+
+Usage:	docker container start [OPTIONS] CONTAINER [CONTAINER...]
+
+Start one or more stopped containers
+
+Options:
+  -a, --attach               Attach STDOUT/STDERR and forward signals
+      --detach-keys string   Override the key sequence for detaching a container
+  -i, --interactive          Attach container's STDIN
+
+```
+
+#### 终止容器
+
+* 终止 - `docker container stop`
+* 终止后重启- `docker container restart`
+
+#### 进入容器
+
+在使用  `-d ` 参数时，容器启动后会进入后台。某些时候需要进入容器进行操作，可以使用：
+
+* `docker attach` - 附加到容器运行的进程
+* `docker exec` - 容器里执行命令，推荐使用这个
+
+
+
+
+
+```text
+$ docker help attach 
+
+Usage:	docker attach [OPTIONS] CONTAINER
+
+Attach local standard input, output, and error streams to a running container
+连接到容器标准输入输出和标准错误
+
+Options:
+      --detach-keys string   Override the key sequence for detaching a container
+      --no-stdin             Do not attach STDIN
+      --sig-proxy            Proxy all received signals to the process (default true)
+```
+
+注意如果从attach的stdin中exit,会导致容器退出
+
+
+
+```text
+$ docker help exec
+
+Usage:	docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
+Run a command in a running container
+
+Options:
+  -d, --detach               Detached mode: run command in the background
+      --detach-keys string   Override the key sequence for detaching a container
+  -e, --env list             Set environment variables
+  -i, --interactive          Keep STDIN open even if not attached 链接标准输入
+      --privileged           Give extended privileges to the command
+  -t, --tty                  Allocate a pseudo-TTY 分配伪终端
+  -u, --user string          Username or UID (format: <name|uid>[:<group|gid>])
+  -w, --workdir string       Working directory inside the container
+```
+
+从exec的stdin中exit,容器不会停止，这是推荐的原因
+
+#### 导入导出删除
+
+* 导出 - `docker export 7691a814370e > ubuntu.tar`
+* 导入快照为镜像 - `cat ubuntu.tar | docker import - test/ubuntu:v3.0`
+* 删除 - `docker container rm name`
+  * 如果要删除一个运行中的容器，可以添加`  -f  `参数。`Docker` 会发送  `SIGKILL`  信号给容器。
+
+* 清理所有终止容器 - `docker container prune`
+
+### 数据管理
+
+#### 数据卷
+
+`数据卷 Volumes`  是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：
+
+* 可以在容器之间共享和重用
+* 对  `数据卷`  的修改会立马生效
+* 对 ` 数据卷`  的更新，不会影响镜像
+* 默认会一直存在，即使容器被删除
+
+
+
+创建一个数据卷
+
+```shell
+$ docker volume create my-vol
+my-vol
+
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               my-vol
+
+$ docker volume inspect my-vol 
+[
+    {
+        "CreatedAt": "2020-05-09T14:32:47+08:00",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+        "Name": "my-vol",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+```
+
+
+
+
+
+启动一个挂载数据卷的容器
+
+```shell
+$ docker run -it \
+	--name test-vol \
+	--mount source=my-vol,target=/data \
+	alpine \
+	/bin/sh
+
+# -v my-vol:/data \  也可以，推荐使用mount
+```
+
+删除数据卷 - `docker volume rm my-vol`
+
+
+
+#### 挂载主机目录
+
+
+
+```shell
+$ docker run -it \
+	--name test-vol \
+	--mount type=bind,source=/var/data,target=/opt/data \
+	alpine \
+	/bin/sh
+
+# -v /var/data:/opt/data \ 也可以，推荐使用mount
+# --mount type=bind,source=/var/data,target=/opt/data,readonly \    加个只读属性
+```
+
+
+
+### docker网络
+
+可以将容器加入自定义的 Docker 网络来连接多个容器
+
+```shell
+# 创建网络
+$ docker network create -d bridge my-net
+# -d  参数指定 Docker 网络类型  有  bridge   overlay  
+
+$ docker run -it --rm --name busybox1 --network my-net busybox sh
+$ docker run -it --rm --name busybox2 --network my-net busybox sh
+
+# ping
+/ # ping busybox2
+PING busybox2 (172.19.0.3): 56 data bytes
+64 bytes from 172.19.0.3: seq=0 ttl=64 time=0.072 ms
+64 bytes from 172.19.0.3: seq=1 ttl=64 time=0.118 ms
+```
+
+
+
+### 仓库
+
+Docker 官方维护了一个公共仓库 [Docker Hub](https://hub.docker.com/)，也可以自己搭建私有仓库
+
+* 登录 - `docker login`
+* 退出登录 - `docker logout`
+* 推送镜像 - `docker push`
+
+
+
+```shell
+$ docker tag ubuntu:17.10 username/ubuntu:17.10
+
+$ docker image ls
+REPOSITORY TAG IMAGE ID CREATED SIZE
+ubuntu 17.10 275d79972a86 6 days ago 94.6MB
+username/ubuntu 17.10 275d79972a86 6 days ago 94.6MB
+
+$ docker push username/ubuntu:17.10
+
+$ docker search username
+NAME DESCRIPTION STARS OFFICIAL AUTOMATED
+username/ubuntu
+```
+
+
+
+
+
+
+
+## 推荐些镜像
+
+* `busybox` - 有linux常用命令，非常小巧
+* `alpine` - 功能比`busybox`完善，还有转的的包管理`apk`，我喜欢用这个做基础镜像
