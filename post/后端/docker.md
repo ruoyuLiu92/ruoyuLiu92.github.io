@@ -326,6 +326,7 @@ Options:
 	-p <宿主端口>:<容器端口>	映射端口
 	-P	将所有EXPOSE声明的端口映射到随机端口
 	--network network 加入docker网络
+	--link list	链接其他容器
 ```
 
 ```bash
@@ -911,3 +912,4 @@ username/ubuntu
 
 * `busybox` - 有linux常用命令，非常小巧
 * `alpine` - 功能比`busybox`完善，还有转的的包管理`apk`，我喜欢用这个做基础镜像
+* `scratch` - 空镜像，用来从0构建镜像，go语言生成的可执行文件直接放进去，不要太爽
