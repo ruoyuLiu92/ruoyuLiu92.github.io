@@ -13,6 +13,8 @@ protobuf 是具体runtime
 
 项目的readme里面有具体安装方法
 
+
+
 ```shell
 # linux x86_64
 # -x socks... 是我自己的代理，可以不加
@@ -34,7 +36,10 @@ ldconfig
 3. 在c++中使用
 
 * 定义`.proto`文件
-```
+
+
+
+```protobuf
 syntax = "proto2";
 
 package tutorial; // 指定包名，防止命名冲突
@@ -64,13 +69,27 @@ message AddressBook {
 ```
 
 * 编译 protocol buffer
-目的是生成读写 AddressBook （以及 Person 和 PhoneNumber）的类
+
+  
+
+  
+
+  目的是生成读写 AddressBook （以及 Person 和 PhoneNumber）的类
 ```shell
 protoc -I=$SRC_DIR --cpp_out=$DST_DIR $SRC_DIR/addressbook.proto
 ```
 得到文件 `addressbook.pb.h` `addressbook.pb.cc`
+
+
+
 * 在代码中调用
-看起来是这样的：
+
+  
+
+  看起来是这样的：
+
+
+
 ```cpp
 #include <iostream>
 #include <fstream>
@@ -98,9 +117,15 @@ for (int j = 0; j < person.phones_size(); j++) {
 ```
 具体代码见[github](https://github.com/zshorz/test_protobuf)
 
+
+
 编译的时候请注意，系统可能存在老版本的`libprotobuf.so`文件，先用 `locate libprotobuf.so` 看一下，坑死我了
+
 我安装的lib在`/usr/local/lib`下，而系统的在`/usr/lib`下，搜索优先级高，如果不卸载可以 `-L/usr/local/lib -lprotobuf`
+
 不然可能报类似错误：`对‘google::protobuf::MessageLite::ParseFromIstream(std::istream*)’未定义的引用`
+
+
 
 ```shell
 g++ -o test test_writing.cpp addressbook.pb.cc -lprotobuf
@@ -109,9 +134,13 @@ g++ -o test test_writing.cpp addressbook.pb.cc -lprotobuf
 ## 在go中使用
 流程和c++一样
 
+
+
 `addressbook.proto`文件：
 
-```
+
+
+```protobuf
 syntax = "proto3";
 package tutorial;
 
@@ -144,11 +173,17 @@ message AddressBook {
 }
 ```
 编译，需要多安装一个为go生成代码的插件
+
+
+
 ```shell
 export https_proxy=socks5://192.168.0.103:1080  # 这里我用了自己的代理，可以不加
 go get github.com/golang/protobuf/protoc-gen-go
 ```
 然后编译即可
+
+
+
 ```shell
 protoc --go_out=. addressbook.proto
 ```
@@ -157,6 +192,9 @@ protoc --go_out=. addressbook.proto
 
 
 go使用代码
+
+
+
 ```go
 package main
 
@@ -210,6 +248,8 @@ func main() {
 // will write in a.txt
 // people:<name:"zsh" id:1 email:"adgadg" > 
 ```
+
+
 具体代码见[github](https://github.com/zshorz/test_protobuf)
 
 
