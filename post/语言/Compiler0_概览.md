@@ -21,7 +21,16 @@
 
 
 
-![](D:\awork\zshorz.github.io\post\语言\img\fontback.png)
+![](img\fontback.png)
 
 
 
+
+
+
+
+## 参考
+
+* [《编译原理及实践》](https://book.douban.com/subject/6982310/)
+* [华保健老师的网易云公开课](https://mooc.study.163.com/learn/1000002001#/learn/announce)
+* [陈意云老师的公开课及PPT课件](https://www.bilibili.com/video/BV1RW411v7R7)
