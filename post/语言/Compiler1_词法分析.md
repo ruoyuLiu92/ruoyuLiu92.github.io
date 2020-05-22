@@ -52,7 +52,7 @@ $$
 d_1\to r_1 \\
 d_2\to r_2 \\
 ...\\
-d_n\to r_n
+d_n\to r_n
 $$
 
 - 各个$d_i$的名字都不同
@@ -83,7 +83,7 @@ c语言标识符，以字母下划线开头，后跟0个或多个数字字母下
 $$
 letter\_ \to A|B|...|Z|a|b|...|z|\_  \\
 digit \to 0|1|...|9\\
-id -> letter\_(letter\_|digit)^*
+id \to letter\_(letter\_|digit)^*
 $$
 
 
