@@ -68,30 +68,30 @@ exp \to exp\  op\  exp |(exp)|number \\
 op\to +|-|*
 $$
 对于上面的文法，我们构造出记号串 $(numver\ -\ number)\ *\ number$，下面两种推导都可以
-$$
-\begin{align}
-exp \Rightarrow& exp\ op\ exp\\
-\Rightarrow& exp\ op\ number\\
-\Rightarrow& exp\ *\ number\\
-\Rightarrow& (exp)\ *\ number\\
-\Rightarrow& (exp\ op\ exp)\ *\ number\\
-\Rightarrow& (exp\ op\ number)\ *\ nummber\\
-\Rightarrow& (exp\ -\ number)\ *\ nummber\\
-\Rightarrow& (number\ -\ number)\ *\ nummber\\
-\end{align}
-$$
+
 
 $$
-\begin{align}
-exp \Rightarrow& exp\ op\ exp\\
-\Rightarrow& (exp)\ op\ exp\\
-\Rightarrow& (exp\ op\ exp)\ op\ exp\\
-\Rightarrow& (number\ op\ exp)\ op\ exp\\
-\Rightarrow& (number\ -\ exp)\ op\ exp\\
-\Rightarrow& (number\ -\ number)\ op\ exp\\
-\Rightarrow& (number\ -\ number)\ *\ exp\\
-\Rightarrow& (number\ -\ number)\ *\ number\\
-\end{align}
+exp \Rightarrow exp\ op\ exp\\
+\Rightarrow exp\ op\ number\\
+\Rightarrow exp\ *\ number\\
+\Rightarrow (exp)\ *\ number\\
+\Rightarrow (exp\ op\ exp)\ *\ number\\
+\Rightarrow (exp\ op\ number)\ *\ nummber\\
+\Rightarrow (exp\ -\ number)\ *\ nummber\\
+\Rightarrow (number\ -\ number)\ *\ nummber\\
+$$
+
+
+$$
+
+exp \Rightarrow exp\ op\ exp\\
+\Rightarrow (exp)\ op\ exp\\
+\Rightarrow (exp\ op\ exp)\ op\ exp\\
+\Rightarrow (number\ op\ exp)\ op\ exp\\
+\Rightarrow (number\ -\ exp)\ op\ exp\\
+\Rightarrow (number\ -\ number)\ op\ exp\\
+\Rightarrow (number\ -\ number)\ *\ exp\\
+\Rightarrow (number\ -\ number)\ *\ number\\
 $$
 
 
