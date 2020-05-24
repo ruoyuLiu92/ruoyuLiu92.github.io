@@ -174,7 +174,7 @@ int main()
 
 ## std::function
 
-C++11 `std::function` 是一种通用、多态的函数封装， 它的实例可以对任何可以调用的目标实体进行存储、复制和调用操作， 它也是对 C++中现有的可调用实体的一种类型安全的包裹（相对来说，函数指针的调用不是类型安全的）， 换句话说，就是函数的容器。当我们有了函数的容器之后便能够更加方便的将函数、函数指针作为对象进行处理。
+ `std::function` 是在 C++11 中新增的一个用于统一包装可调用对象的模板类型. 所谓统一包装, 就是无论被包装的内容的实际类型, 只要符合相应的函数调用签名, 都可以装入一个 `std::function` 对象中使用，比如普通函数，静态成员函数，函数对象。（非静态成员函数可以用lambda或bind包装传给function）
 
 ```cpp
 #include <functional>
@@ -184,20 +184,107 @@ int foo(int para) {
     return para;
 }
 
+class Callable{
+public:
+    Callable(int a, int b):x(a),y(b){}
+    int operator()(int arg){
+        return arg+x+y;
+    }
+private:
+	int x,y;    
+};
+
 int main() {
     // std::function 包装了一个返回值为 int, 参数为 int 的函数
     std::function<int(int)> func = foo;
-
+    
+    // 包装一个函数对象
+    Callable c(1,2);
+    std::function<int(int)> func2 = c;
+	
+    // 包装一个lambda，lambda本质也是函数对象
     int important = 10;
-    std::function<int(int)> func2 = [&](int value) -> int {
+    std::function<int(int)> func3 = [&](int value) -> int {
         return 1+value+important;
     };
+    
     std::cout << func(10) << std::endl;
     std::cout << func2(10) << std::endl;
+    std::cout << func3(10) << std::endl;
 }
+/* 输出
+10
+13
+21
+*/
 ```
 
+`std::bind`的实现位于`<std_function.h>`，它使用了模板偏特化的技巧来接收函数调用签名。
+
+```cpp
+// 默认特化没有实现
+template<typename Signature>
+class function;
+
+// 实现有返回值类型和 任意 个参数类型的偏特化
+template<typename Res, typename... ArgTypes>
+class function<Res(ArgTypes...)>
+    
+// 类似函数签名的模板特化形式并不常见, 虽然它是 C++11 之前就一直存在的语法.
+```
+
+`std::function`可以捕获函数和任意大小的函数对象，函数对象的大小为未知的，而`std::function`得大小总是固定的，保存函数指针或函数对象的工作是由` _Function_base`这个类来实现的，它本身有一些固定空间，如果存不下，会从堆上分配内存。
+
+### 实现细节说明
+
+`std::function`在头文件中的定义
+
+```cpp
+template<typename _Res, typename... _ArgTypes>
+class function<_Res(_ArgTypes...)>
+	: public _Maybe_unary_or_binary_function<_Res, _ArgTypes...>, 
+		// 如果是一元函数或二元函数，会加上一些trait信息，与STL更好的融合
+      private _Function_base 
+      	// 负责存储函数指针或函数对象，根据大小，选择存储方式
+{
+public:
+          typedef _Res result_type; 
+          
+          // 构造器 ...
+          
+          // 重载 bool()
+          explicit operator bool() const noexcept
+          { return !_M_empty(); }
+          
+          // 重载 ()
+          _Res operator()(_ArgTypes... __args) const
+          {
+              if (_M_empty()) // 如果_M_functor为空，就抛出异常
+                  __throw_bad_function_call();
+              return _M_invoker(_M_functor, std::forward<_ArgTypes>(__args)...);
+          }
+          
+          // ... 省略
+                  
+private:
+          using _Invoker_type = _Res (*)(const _Any_data&, _ArgTypes&&...);
+          _Invoker_type _M_invoker; // 构造器里会初始化它，负责调用函数
+          
+};
+
+```
+
+暂略。。。
+
+https://www.cnblogs.com/jerry-fuyi/p/std_function_interface_implementation.html
+
+
+
 ## std::bind
+
+其实可以发现，**Lambda完全可以替代bind**
+
+
 
 `std::bind` 则是用来绑定函数调用的参数的， 它解决的需求是我们有时候可能并不一定能够一次性获得调用某个函数的全部参数，通过这个函数， 我们可以将部分调用参数提前绑定到函数身上成为一个新的对象，然后在参数齐全后，完成调用：
 
