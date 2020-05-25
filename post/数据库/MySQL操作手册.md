@@ -4,7 +4,7 @@
 * 此文为个人笔记，MySQL命令不区分大小写
 * 空格符复制有时会出现格式错误，删掉空格再自己打一个
 * \`(反引号)是转义字符，当你自定义名字和关键字冲突可以 \`name\` 括起来
-* by [zsh](https://www.yesiare.cn)
+* by [zsh](http://www.yesiare.cn)
 
 ## 1 MySQL安装
 
